@@ -232,25 +232,31 @@ def create_pdf_report(df, diagram_files, section_reports, pdf_filename="section_
     """
     pdf = PDFReport()
     
-    # 첫 페이지: 요약 표
-    pdf.add_page()
-    pdf.set_font("NanumGothic", "", 10)
-    pdf.cell(0, 10, "【단면검토 요약】", ln=True, align="C")
-    pdf.ln(2)
-    headers = list(df.columns)
-    epw = pdf.w - pdf.l_margin - pdf.r_margin  # effective page width
-    col_width = epw / len(headers)
-    row_height = 10
+    # 첫 페이지: 요약 표를 가로 방향(Landscape)으로 출력
+    pdf.add_page(orientation="L")
     pdf.set_font("NanumGothic", "B", 10)
+    pdf.cell(0, 10, "【단면검토 요약】", ln=True, align="C")
+    pdf.ln(5)
+
+    headers = list(df.columns)
+    epw = pdf.w - pdf.l_margin - pdf.r_margin  # 유효 페이지 너비
+    col_width = epw / len(headers)  # 각 열의 너비를 동일하게 분배
+    row_height = 8  # 행 높이
+
+    # 헤더 출력 (회색 배경)
+    pdf.set_fill_color(200, 200, 200)
     for header in headers:
-        pdf.cell(col_width, row_height, str(header), border=1, align="C")
+        pdf.cell(col_width, row_height, header, border=1, align="C", fill=True)
     pdf.ln(row_height)
-    pdf.set_font("NanumGothic", "", 10)
-    for idx, row in df.iterrows():
+
+    # 데이터 행 출력 (각 셀은 한 줄로 출력)
+    pdf.set_font("NanumGothic", "", 9)
+    for _, row in df.iterrows():
         for header in headers:
-            pdf.cell(col_width, row_height, str(row[header]), border=1, align="C")
+            cell_text = str(row[header])
+            pdf.cell(col_width, row_height, cell_text, border=1, align="C")
         pdf.ln(row_height)
-    
+
     # 각 단면별 상세 보고서 페이지
     for sec_name in section_reports:
         pdf.add_page()
@@ -262,7 +268,7 @@ def create_pdf_report(df, diagram_files, section_reports, pdf_filename="section_
         pdf.ln(3)
         if sec_name in diagram_files:
             pdf.image(diagram_files[sec_name], x=30, w=150)
-    
+
     pdf.output(pdf_filename)
 
 # -------------------------------
