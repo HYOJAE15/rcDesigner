@@ -1,33 +1,48 @@
 import pandas as pd
 
-"""
-검토하고자 하는 단면의 제원을 입력하세요.
-    "section": ["슬래브_종방향_정", "일반보(종방향)_부", "지점부(횡,중앙,1200H)_정"],
-    "b (mm)": [1000, 1000, 5800],
-    "d (mm)": [250, 250, 1100],
-    "cover (mm)": [100, 100, 100],
-    "Mu (kN·m)": [242.015, 152.166, 4724.851],
-    "Vu (kN)": [167.204, 206.159, 0.0],
-    "A_prov (mm²)": [3096.8, 2292.0, 22064.7],
-    "fck (MPa)": [40, 40, 40],
-    "fy (MPa)": [500, 500, 500],
-    "fvy (MPa)": [400, 400, 400]
-"""
+def create_excel_template(template_path="section_input_template.xlsx"):
+    """
+    RC 단면 설계에 필요한 입력값 컬럼을 포함한 엑셀 템플릿을 생성한다.
+    - template_path: 생성할 엑셀 파일 이름(경로)
+    """
 
-template_data = {
-    "section": ["슬래브_종방향_정", "일반보(종방향)_부", "지점부(횡,중앙,1200H)_정"],
-    "b (mm)": [1000, 1000, 5800],
-    "d (mm)": [250, 250, 1100],
-    "cover (mm)": [100, 100, 100],
-    "Mu (kN·m)": [242.015, 152.166, 4724.851],
-    "Vu (kN)": [167.204, 206.159, 0.0],
-    "A_prov (mm²)": [3096.8, 2292.0, 22064.7],
-    "fck (MPa)": [40, 40, 40],
-    "fy (MPa)": [500, 500, 500],
-    "fvy (MPa)": [400, 400, 400]
-}
+    # 엑셀에 들어갈 컬럼(예시)
+    columns = [
+        "MemberID",   # 부재 식별자(이름)
+        "b(mm)",      # 부재 폭
+        "h(mm)",      # 부재 전체높이
+        "d(mm)",      # 철근 유효깊이
+        "cover(mm)",  # 피복 두께
+        "fck(MPa)",   # 콘크리트 압축강도
+        "fy(MPa)",    # 철근 항복강도
+        "Vu(kN)",     # 설계 전단력
+        "Mu(kN·m)",   # 설계 휨모멘트
+        # 필요하면 추가 컬럼 예시
+        # "barDiameter(mm)",  # 주인장철근 지름
+        # "nRebar",           # 철근 개수
+        # "StirrupSpacing(mm)", # 전단철근 간격
+        # ...
+    ]
 
-df_template = pd.DataFrame(template_data)
-df_template.to_excel("section_data_template.xlsx", index=False)
+    # 예시로 보여줄 한두 줄의 샘플 데이터
+    # (실제 설계에서는 사용자가 여기에 직접 입력)
+    data = [
+        ["S1", 1000, 350, 50, 40, 500, 167.2, 242.0],
+        ["B1", 700,  1200, 100, 40, 500, 1101.9, 2354.6],
+        # 필요시 더 많은 예시행 추가 가능
+    ]
 
-print("엑셀 양식 파일(section_data_template.xlsx)이 생성되었습니다.")
+    # 판다스 DataFrame 생성
+    df = pd.DataFrame(data, columns=columns)
+
+    # 엑셀파일로 내보내기
+    with pd.ExcelWriter(template_path, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="SectionData", index=False)
+
+    print(f"엑셀 템플릿 생성 완료: {template_path}")
+
+# -------------------------
+# 직접 실행 예시
+# -------------------------
+if __name__ == "__main__":
+    create_excel_template()
