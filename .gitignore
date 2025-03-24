@@ -1,3 +1,7 @@
+# file
 *.xlsx
 *.pdf
+*.docx
+
+# folder
 Figure/

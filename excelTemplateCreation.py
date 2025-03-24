@@ -6,7 +6,7 @@ def create_excel_template(template_path="section_input_template.xlsx"):
     - template_path: 생성할 엑셀 파일 이름(경로)
     """
 
-    # 엑셀에 들어갈 컬럼(예시)
+    # 엑셀에 들어갈 컬럼
     columns = [
         "MemberID",   # 부재 식별자(이름)
         "b(mm)",      # 부재 폭
@@ -17,18 +17,19 @@ def create_excel_template(template_path="section_input_template.xlsx"):
         "fy(MPa)",    # 철근 항복강도
         "Vu(kN)",     # 설계 전단력
         "Mu(kN·m)",   # 설계 휨모멘트
-        # 필요하면 추가 컬럼 예시
+        
+        # 필요하면 추가
         # "barDiameter(mm)",  # 주인장철근 지름
         # "nRebar",           # 철근 개수
         # "StirrupSpacing(mm)", # 전단철근 간격
         # ...
     ]
 
-    # 예시로 보여줄 한두 줄의 샘플 데이터
-    # (실제 설계에서는 사용자가 여기에 직접 입력)
+    # 사용자가 직접 입력
+    ### [""MemberID", "b(mm)", "h(mm)", "d(mm)", "cover(mm)", "fck(MPa)", "fy(MPa)", "Vu(kN)", "Mu(kN·m)"]
     data = [
-        ["S1", 1000, 350, 50, 40, 500, 167.2, 242.0],
-        ["B1", 700,  1200, 100, 40, 500, 1101.9, 2354.6],
+        ["슬래브_종방향_정", 1000, 350, 250, 100, 40, 500, 167.204, 242.015],
+        ["슬래브_횡방향_정", 1000, 350, 250, 100, 40, 500, 152.166, 206.159],
         # 필요시 더 많은 예시행 추가 가능
     ]
 
